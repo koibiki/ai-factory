@@ -53,6 +53,6 @@ testa = testa.drop(date_columns, axis=1)
 testb = testb.drop(date_columns, axis=1)
 
 # 输出数据
-train.to_csv('../handled_data/train_drop_date.csv', index=None)
-testa.to_csv('../handled_data/testa_drop_date.csv', index=None)
-testb.to_csv('../handled_data/testb.drop_date.csv', index=None)
+train.to_csv('../handled_data/drop_date/train_drop_date.csv', index=None)
+testa.to_csv('../handled_data/drop_date/testa_drop_date.csv', index=None)
+testb.to_csv('../handled_data/drop_date/testb_drop_date.csv', index=None)
