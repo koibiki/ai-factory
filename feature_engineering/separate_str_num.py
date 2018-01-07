@@ -30,5 +30,4 @@ def num_to_str(data):
 train_str = num_to_str(train_str)
 train_str.to_csv('../handled_data/str_num/train_str.csv', index=None)
 train_num.to_csv('../handled_data/str_num/train_num.csv', index=None)
-print(train_num.head())
 
