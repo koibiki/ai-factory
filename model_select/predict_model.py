@@ -10,3 +10,7 @@ class PredictModel:
     @abstractmethod
     def run(self, X_train, y_train, X_valid, y_valid):
         pass
+
+    @abstractmethod
+    def predict(self, test_X):
+        pass
