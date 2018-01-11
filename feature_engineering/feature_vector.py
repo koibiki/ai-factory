@@ -3,7 +3,8 @@ import numpy as np
 
 
 def feature_vector(train, test):
-    train_dummies= pd.get_dummies(train)
+    print("执行 Feature Vector")
+    train_dummies = pd.get_dummies(train)
     test_dummies = pd.get_dummies(test)
     test_dummies = delete_feature(train_dummies, test_dummies)
     test_dummies = feature_align(train_dummies, test_dummies)

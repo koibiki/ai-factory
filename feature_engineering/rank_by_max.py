@@ -2,7 +2,7 @@ import pandas as pd
 
 
 # 需要在 rank 之前运行
-def rank_feature(train, test):
+def rank_feature_by_max(train, test):
     print("执行 Rank Feature by max")
     train_test = pd.concat([train, test], axis=0)
     train_test_rank_standard = (train_test - train_test.min())/(train_test.max() - train_test.min())

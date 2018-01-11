@@ -27,8 +27,9 @@ def stratified_sampling(train_x, train_y):
 
     x_train = list(x_train_1) + list(x_train_2) + list(x_train_3)
     y_train = list(y_train_1) + list(y_train_2) + list(y_train_3)
-
-    x_valid = list(x_valid_1) + list(x_valid_2) + list(x_train_3)
-    y_valid = list(y_valid_1) + list(y_valid_2) + list(y_train_3)
+    print("x_train1:" + str(len(x_train_1)) + "  x_train2:" + str(len(x_train_2))+"  x_train3:" + str(len(x_train_3)))
+    x_valid = list(x_valid_1) + list(x_valid_2) + list(x_valid_3)
+    y_valid = list(y_valid_1) + list(y_valid_2) + list(y_valid_3)
+    print("x_valid_1:" + str(len(x_valid_1)) + "  x_valid_2:" + str(len(x_valid_2))+"  x_valid_3:" + str(len(x_valid_3)))
 
     return x_train, x_valid, y_train, y_valid

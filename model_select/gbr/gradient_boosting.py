@@ -12,7 +12,14 @@ class GBR(PredictModel):
     gbr = None
 
     def create_predict_model(self):
-        self.gbr = GradientBoostingRegressor()
+        self.gbr = GradientBoostingRegressor(loss='ls', alpha=0.9,
+                                             n_estimators=500,
+                                             learning_rate=0.05,
+                                             max_depth=8,
+                                             subsample=0.8,
+                                             max_features=0.6,
+                                             min_samples_split=9,
+                                             max_leaf_nodes=10)
 
     def run(self, X_train, y_train, X_valid, y_valid):
         self.create_predict_model()
@@ -41,4 +48,8 @@ class GBR(PredictModel):
         plt.show()
 
     def predict(self, test_X):
-        pass
+        a_pred = self.gbr.predict(test_X)
+        gbr_a_pattern = pd.read_csv('input/a_pattern.csv', names=['id'])
+        gbr_a_pattern['Y'] = a_pred
+        gbr_a_pattern.to_csv('output/gbr_a_pattern.csv', index=None, header=None)
+        print(gbr_a_pattern.head())
