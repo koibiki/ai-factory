@@ -1,6 +1,7 @@
 import pandas as pd
 
 
+# 与 rank by max 择一执行
 def rank_feature(train, test):
     print("执行 Rank Feature")
     train_test = pd.concat([train, test], axis=0)

@@ -10,12 +10,14 @@ def stratified_sampling(train_x, train_y):
     y_data_1 = train_x_y_1.Y
     x_train_1, x_valid_1, y_train_1, y_valid_1 = \
         train_test_split(x_data_1.values, y_data_1.values, test_size=0.2, random_state=33)
+    print(x_data_1.shape, " " + str(y_data_1.shape))
 
     train_x_y_2 = train_x_y[train_x_y.nan_standard == 2]
     x_data_2 = train_x_y_2.drop(['nan_standard', 'Y'], axis=1)
     y_data_2 = train_x_y_2.Y
     x_train_2, x_valid_2, y_train_2, y_valid_2 = \
         train_test_split(x_data_2.values, y_data_2.values, test_size=0.2, random_state=33)
+    print(x_data_2.shape, " " + str(y_data_2.shape))
 
     train_x_y_3 = train_x_y[train_x_y.nan_standard == 3]
     x_data_3 = train_x_y_3.drop(['nan_standard', 'Y'], axis=1)

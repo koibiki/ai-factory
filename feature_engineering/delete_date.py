@@ -28,13 +28,13 @@ def is_prefix2017(num):
     return str_num.startswith('2017')
 
 
-def get_date_columns(self, data):
+def get_date_columns(data):
     columns = data.iloc[0, :].index
     date_column = []
     for row_index in range(len(data)):
         item = data.iloc[row_index]
         for index in range(len(item)):
-            if type(item[index]) == np.int64 and self.is_prefix2017(item[index]):
+            if type(item[index]) == np.int64 and is_prefix2017(item[index]):
                 date_column.append(columns[index])
     return date_column
 
