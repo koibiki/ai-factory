@@ -18,9 +18,15 @@ def rank_feature(train, test):
     train_test_rank[(rank_count * 4 / 5 < train_test_rank) & (train_test_rank <= rank_count * 9 / 10)] = 9
     train_test_rank[rank_count * 9 / 10 < train_test_rank] = 10
 
-    for i in range(1, 11, 1):
-        train_test_rank['n' + str(i)] = (train_test_rank == i).sum(axis=1)
-
     train_num_rank = train_test_rank.iloc[0:train.shape[0], :]
     test_num_rank = train_test_rank.iloc[train.shape[0]:, :]
     return train_num_rank, test_num_rank
+
+
+def rank_feature_count(train, test):
+    train_test = pd.concat([train, test], axis=0)
+    for i in range(1, 11, 1):
+        train_test['n' + str(i)] = (train_test == i).sum(axis=1)
+    train_rank_count = train_test.iloc[0:train.shape[0], :]
+    test_rank_count = train_test.iloc[train.shape[0]:, :]
+    return train_rank_count, test_rank_count

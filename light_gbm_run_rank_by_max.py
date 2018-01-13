@@ -12,8 +12,9 @@ from feature_engineering.compute_angle import compute_angle
 from feature_engineering.delete_constant import delete_constant
 from feature_engineering.rank_by_max import rank_feature_by_max
 from feature_engineering.rank_feature import rank_feature
+from feature_engineering.rank_feature import rank_feature_count
 from feature_engineering.nan_stastics import nan_statics
-from feature_engineering.delete_nan import delete_nan
+from feature_engineering.delete_nan import delete_all_nan
 from sampling.stratified_sampling import stratified_sampling
 from sklearn.decomposition import PCA
 from model_select.gbr.gradient_boosting import GBR
@@ -37,17 +38,17 @@ test_X_str, test_X_num = separate_str_num(test_X)
 
 train_X_str, test_X_str = feature_vector(train_X_str, test_X_str)
 
-# train_X_str, test_X_str = compute_angle(train_X_str, test_X_str)
-
 train_X_num, test_X_num = delete_constant(train_X_num, test_X_num)
 
 # train_X_num, test_X_num = rank_feature_by_max(train_X_num, test_X_num)
 
-# train_X_num, test_X_num = rank_feature(train_X_num, test_X_num)
+train_X_num, test_X_num = rank_feature(train_X_num, test_X_num)
+
+train_X_num, test_X_num = rank_feature_count(train_X_num, test_X_num)
 #
-# train_X_num, test_X_num = nan_statics(train_X_num, test_X_num)
+train_X_num, test_X_num = nan_statics(train_X_num, test_X_num)
 #
-train_X_num, test_X_num = delete_nan(train_X_num, test_X_num)
+train_X_num, test_X_num = delete_all_nan(train_X_num, test_X_num)
 
 train_X = pd.concat([train_X_num, train_X_str], axis=1)
 test_X = pd.concat([test_X_num, test_X_str], axis=1)
@@ -69,16 +70,16 @@ test_X = pd.concat([test_X_num, test_X_str], axis=1)
 
 # train_X = train_X_num
 
-X_train, X_valid, y_train, y_valid = train_test_split(train_X.values, train_Y.values, test_size=0.25, random_state=33)
+# X_train, X_valid, y_train, y_valid = train_test_split(train_X.values, train_Y.values, test_size=0.25, random_state=33)
 
-# X_train, X_valid, y_train, y_valid = stratified_sampling(train_X, train_Y)
+X_train, X_valid, y_train, y_valid = stratified_sampling(train_X, train_Y)
 # X_test = test_X.drop(['nan_standard'], axis=1).values
 
 
-estimator = PCA(120)
-X_train = estimator.fit_transform(X_train)
-X_valid = estimator.transform(X_valid)
-X_test = estimator.transform(test_X)
+# estimator = PCA(120)
+# X_train = estimator.fit_transform(X_train)
+# X_valid = estimator.transform(X_valid)
+# X_test = estimator.transform(test_X)
 
 lgm = LightGBM()
 lgm.run(X_train, y_train, X_valid, y_valid)
@@ -91,6 +92,6 @@ lgm.run(X_train, y_train, X_valid, y_valid)
 # knr.run(X_train, y_train, X_valid, y_valid)
 # knr.predict(X_test)
 
-gbr = GBR()
-gbr.run(X_train, y_train, X_valid, y_valid)
-gbr.predict(X_test)
+# gbr = GBR()
+# gbr.run(X_train, y_train, X_valid, y_valid)
+# gbr.predict(X_test)
