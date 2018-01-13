@@ -22,7 +22,9 @@ test_X = test.iloc[:, 1:]
 
 train_X, test_X = delete_date(train_X, test_X)
 
-train_X_str, train_X_num, test_X_str, test_X_num = separate_str_num(train_X, test_X)
+train_X_str, train_X_num = separate_str_num(train_X)
+
+test_X_str, test_X_num = separate_str_num(test_X)
 
 train_X_str, test_X_str = feature_vector(train_X_str, test_X_str)
 

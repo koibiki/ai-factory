@@ -2,14 +2,18 @@ import numpy as np
 
 
 # 只能处理数值特征 , 需先分离字符和数值 项
+def nan_count_statics(data):
+    data['nan_count'] = (np.isnan(data)).sum(axis=1)
+    data['nan_standard'] = data.nan_count.apply(lambda x: standard_nan(x))
+    return data
+
+
 def nan_statics(train, test):
     print("执行 Nan Statics")
     train_count = train
     test_count = test
-    train_count['nan_count'] = (np.isnan(train_count)).sum(axis=1)
-    test_count['nan_count'] = (np.isnan(test_count)).sum(axis=1)
-    train_count['nan_standard'] = train_count.nan_count.apply(lambda x: standard_nan(x))
-    test_count['nan_standard'] = test_count.nan_count.apply(lambda x: standard_nan(x))
+    train_count = nan_count_statics(train_count)
+    test_count = nan_count_statics(test_count)
     return train_count, test_count
 
 

@@ -1,11 +1,14 @@
 import pandas as pd
 import numpy as np
+import math
 
 
 def compute_angle(train, test):
     print("执行 Compute Angle")
     train_test = pd.concat([train, test], axis=0)
-    angle_rank = angleClassify(train_test)
+    angles = angle_classify(train_test)
+    angles_standard = angle_standard(angles)
+    angle_rank = rank_angle(angles_standard)
     train_test['angle_rank'] = angle_rank
     train_test.angle_rank = train_test.angle_rank.apply(lambda x: rank_angle(x))
     train_angle = train_test.iloc[0:train.shape[0], :]
@@ -36,11 +39,24 @@ def rank_angle(x):
         x = 10
     return x
 
-def angleClassify(data):
+
+def angle_classify(data):
     angles = []
     for index in range(len(data)):
         cos_value = cos(list(data.iloc[0, :].values), list(data.iloc[index, :].values))
         angles.append(cos_value)
+    return angles
+
+
+def angle_classify_trainsfer(vector, data):
+    angles = []
+    for index in range(len(data)):
+        cos_value = cos(list(vector.values), list(data.iloc[index, :].values))
+        angles.append(math.acos(cos_value) * 180 / math.pi)
+    return angles
+
+
+def angle_standard(angles):
     max_value = np.max(angles)
     min_value = np.min(angles)
     angle_rank = []
@@ -50,15 +66,15 @@ def angleClassify(data):
     return angle_rank
 
 
-def cos(vector1,vector2):
-    dot_product = 0.0;
-    normA = 0.0;
-    normB = 0.0;
-    for a,b in zip(vector1,vector2):
+def cos(vector1, vector2):
+    dot_product = 0.0
+    normA = 0.0
+    normB = 0.0
+    for a, b in zip(vector1, vector2):
         dot_product += a*b
         normA += a**2
         normB += b**2
-    if normA == 0.0 or normB==0.0:
+    if normA == 0.0 or normB == 0.0:
         return None
     else:
         return dot_product / ((normA*normB)**0.5)

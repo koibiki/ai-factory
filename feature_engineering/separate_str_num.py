@@ -1,14 +1,9 @@
-def separate_str_num(train, test):
-    print("执行 Separate Str Num")
-    str_columns = get_str_columns(train)
-    train_str = train.loc[:, str_columns]
-    train_str = num_to_str(train_str)
-    train_num = train.drop(str_columns, axis=1)
-
-    test_str = test.loc[:, str_columns]
-    test_str = num_to_str(test_str)
-    test_num = test.drop(str_columns, axis=1)
-    return train_str, train_num, test_str, test_num
+def separate_str_num(data):
+    str_columns = get_str_columns(data)
+    data_str = data.loc[:, str_columns]
+    data_str = num_to_str(data_str)
+    data_num = data.drop(str_columns, axis=1)
+    return data_str, data_num
 
 
 def get_str_columns(date):
