@@ -3,10 +3,6 @@ import numpy as np
 
 
 # 输入原始数据
-def split_by_tool(train, test):
-    pass
-
-
 def split_by_tool(data):
     pipeline_dict = get_pipeline_dic_by_tool(data)
     tools = list(pipeline_dict.keys())

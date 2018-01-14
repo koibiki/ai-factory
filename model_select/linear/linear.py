@@ -1,6 +1,7 @@
-from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 import pandas as pd
+from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error
 
 from model_select.predict_model import PredictModel
@@ -8,24 +9,20 @@ from model_select.predict_model import PredictModel
 # gbr 需要删除 nan 列
 
 
-class GBR(PredictModel):
-    gbr = None
+class LinearR(PredictModel):
+    lr = None
 
     def create_predict_model(self):
-        self.gbr = GradientBoostingRegressor(loss='ls', alpha=0.9,
-                                             n_estimators=500,
-                                             learning_rate=0.05,
-                                             max_depth=8,
-                                             subsample=0.8,
-                                             max_features=0.6,
-                                             min_samples_split=9,
-                                             max_leaf_nodes=10)
+        self.lr = LinearRegression()
 
     def run(self, X_train, y_train, X_valid, y_valid):
         self.create_predict_model()
-        self.gbr.fit(X_train, y_train)
-        y_pred = self.gbr.predict(X_valid)
-        print("gbr mean_squared_error:", mean_squared_error(y_pred, y_valid))
+        ss = StandardScaler()
+        X_train = ss.fit_transform(X_train)
+        X_valid = ss.transform(X_valid)
+        self.lr.fit(X_train, y_train)
+        y_pred = self.lr.predict(X_valid)
+        print("lr mean_squared_error:", mean_squared_error(y_pred, y_valid))
 
         x = range(len(y_pred))
         plt.plot(x, y_pred, 'r-*', label='y_pred')
@@ -39,7 +36,7 @@ class GBR(PredictModel):
         pd_valid = pd_valid.sort_values(by='Y')
 
         X_valid = pd_valid.drop(['Y'], axis=1).values
-        y_pred = self.gbr.predict(X_valid)
+        y_pred = self.lr.predict(X_valid)
         y_valid = pd_valid.Y.values
 
         x = range(len(y_pred))
@@ -48,7 +45,7 @@ class GBR(PredictModel):
         plt.show()
 
     def predict(self, test_X):
-        a_pred = self.gbr.predict(test_X)
+        a_pred = self.lr.predict(test_X)
         gbr_a_pattern = pd.read_csv('input/a_pattern.csv', names=['id'])
         gbr_a_pattern['Y'] = a_pred
         gbr_a_pattern.to_csv('output/gbr_a_pattern.csv', index=None, header=None)

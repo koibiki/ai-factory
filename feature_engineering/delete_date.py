@@ -8,18 +8,18 @@ test_x_file = 'output/test_X_delete_date.csv'
 
 
 def delete_date(train, test):
-    print("执行 Delete Date")
-    if os.path.exists(train_x_file) and os.path.exists(test_x_file):
-        train_x = pd.read_csv(train_x_file)
-        test_x = pd.read_csv(test_x_file)
-    else:
-        train_date_columns = get_date_columns(train)
-        test_date_columns = get_date_columns(test)
-        date_columns = mix_date_columns([train_date_columns, test_date_columns])
-        train_x = train.drop(date_columns, axis=1)
-        test_x = test.drop(date_columns, axis=1)
-        train_x.to_csv('output/train_X_delete_date.csv', index=None)
-        test_x.to_csv('output/test_X_delete_date.csv', index=None)
+    # print("执行 Delete Date")
+    # if os.path.exists(train_x_file) and os.path.exists(test_x_file):
+    #     train_x = pd.read_csv(train_x_file)
+    #     test_x = pd.read_csv(test_x_file)
+    # else:
+    train_date_columns = get_date_columns(train)
+    test_date_columns = get_date_columns(test)
+    date_columns = mix_date_columns([train_date_columns, test_date_columns])
+    train_x = train.drop(date_columns, axis=1)
+    test_x = test.drop(date_columns, axis=1)
+    # train_x.to_csv('output/train_X_delete_date.csv', index=None)
+    # test_x.to_csv('output/test_X_delete_date.csv', index=None)
     return train_x, test_x
 
 

@@ -16,18 +16,10 @@ def nan_statics(train, test):
     test_count = test
     train_count = nan_count_statics(train_count, 'all')
     test_count = nan_count_statics(test_count, 'all')
-    train_count['nan_standard'] = train_count['nan_count_all'].apply(lambda x: standard_nan(x))
-    test_count['nan_standard'] = test_count['nan_count_all'].apply(lambda x: standard_nan(x))
     return train_count, test_count
 
 
-def standard_nan(x):
-    if x > 160:
-        return 3
-    elif x <= 160 and x > 120:
-        return 2
-    else:
-        return 1
+
 
 
 
