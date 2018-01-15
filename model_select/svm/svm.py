@@ -44,13 +44,10 @@ class Svr(PredictModel):
         # x = range(len(y_pred))
         # plt.plot(x, y_pred, 'r-*', label='y_pred')
         # plt.plot(x, y_valid, 'b-o', label='y_valid')
+        # plt.legend()
         # plt.show()
 
     def predict(self, test_X):
-        test_X = self.mms.transform(test_X)
-        a_pred = self.svr.predict(test_X)
-        gbm_a_pattern = pd.read_csv('input/b_pattern.csv', names=['id'])
-        gbm_a_pattern['Y'] = a_pred
-        gbm_a_pattern.to_csv('output/svr_b_pattern.csv', index=None, header=None)
-        print(gbm_a_pattern.head())
+        ss_test_X = self.mms.transform(test_X)
+        a_pred = self.svr.predict(ss_test_X)
         return a_pred

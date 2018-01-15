@@ -1,6 +1,6 @@
 import pandas as pd
 
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 
 
 def stratified_sampling(train_x, train_y):
