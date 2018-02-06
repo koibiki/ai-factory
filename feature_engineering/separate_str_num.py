@@ -1,23 +1,17 @@
-def separate_str_num(data):
-    str_columns = get_str_columns(data)
-    data_str = data.loc[:, str_columns]
-    data_str = num_to_str(data_str)
-    data_num = data.drop(str_columns, axis=1)
-    return data_str, data_num
+def separate_num_str(df):
+    str_columns = get_str_columns(df)
+    num_columns = [column for column in df.columns if column not in str_columns]
+    return df.loc[:, num_columns], num_to_str(df.loc[:, str_columns])
 
 
-def get_str_columns(date):
-    str_columns = []
-    for item in date.columns:
-        if item.startswith("T") or item.startswith("t"):
-            str_columns.append(item)
-    return str_columns
+def get_str_columns(df):
+    return [column for column in df.columns if column.startswith("T") or column.startswith("t")]
 
 
 def num_to_str(data):
     columns = data.columns
     for item in columns:
-        data[item] = data[item].apply(lambda x: str(x) + "T")
+        data.loc[:, item] = data.loc[:, item].apply(lambda x: str(x) + "T")
     return data
 
 

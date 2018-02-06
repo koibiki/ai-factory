@@ -107,7 +107,24 @@ def cv_important_feature(importances):
         for important_feature in importances:
             if feature not in important_feature.index:
                 count += 1
-        if count >= 3:
+        if count >= 1:
             non_important_feature.append(feature)
-
     return [feature for feature in all_feature if feature not in non_important_feature]
+
+
+def cv_important_feature2(importances):
+    all_feature = calculate_importance_feature(importances)
+    non_important_feature = []
+    for feature in all_feature:
+        count = 0
+        for important_features in importances:
+            if feature not in important_features.index:
+                count += 1
+        if count >= 1:
+            non_important_feature.append(feature)
+    max_important_feature  = []
+    for important_features in importances:
+        for feature in important_features.index[:10]:
+            if feature not in max_important_feature:
+                max_important_feature.append(feature)
+    return [feature for feature in all_feature if feature in max_important_feature or feature not in non_important_feature]

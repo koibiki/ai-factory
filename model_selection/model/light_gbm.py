@@ -79,7 +79,7 @@ class LightGbmR(PredictModel):
 
     def feature_importance(self, level=2):
         importance = pd.Series(self.gbm.feature_importance(importance_type='split'), index=self.columns, name='importance')
-        return importance[importance > level]
+        return importance[importance > level].sort_values(ascending=True)
 
 
 class LightGbmC(PredictModel):

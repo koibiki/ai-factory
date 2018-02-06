@@ -19,18 +19,6 @@ def separate_date_feature(df):
     return df.drop([date_columns], axis=1), df[date_columns]
 
 
-def separate_num_str(df):
-    str_columns = get_str_columns(df)
-    return df.drop(str_columns, axis=1), num_to_str(df[str_columns])
-
-
-def num_to_str(df):
-    columns = df.columns
-    for item in columns:
-        df[item] = df[item].apply(lambda x: str(x) + "T")
-    return df
-
-
 def separate_tool_process(df):
     tool_dict = {}
     current_column = None
@@ -41,10 +29,6 @@ def separate_tool_process(df):
         else:
             tool_dict[current_column].append(column)
     return tool_dict
-
-
-def get_str_columns(df):
-    return [column for column in df.columns if (column.startswith("T") or column.startswith("t"))]
 
 
 def is_prefix2017(num):
