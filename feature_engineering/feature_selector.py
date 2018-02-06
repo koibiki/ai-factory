@@ -13,3 +13,50 @@ def delete_nan(df):
     columns = null_num[null_num < 0.2].index
     return df[columns]
 
+
+def separate_date_feature(df):
+    date_columns = get_date_columns(df)
+    return df.drop([date_columns], axis=1), df[date_columns]
+
+
+def separate_num_str(df):
+    str_columns = get_str_columns(df)
+    return df.drop(str_columns, axis=1), num_to_str(df[str_columns])
+
+
+def num_to_str(df):
+    columns = df.columns
+    for item in columns:
+        df[item] = df[item].apply(lambda x: str(x) + "T")
+    return df
+
+
+def separate_tool_process(df):
+    tool_dict = {}
+    current_column = None
+    for column in df.columns:
+        if column.startswith("T") or column.startswith("t"):
+            tool_dict[column] = []
+            current_column = column
+        else:
+            tool_dict[current_column].append(column)
+    return tool_dict
+
+
+def get_str_columns(df):
+    return [column for column in df.columns if (column.startswith("T") or column.startswith("t"))]
+
+
+def is_prefix2017(num):
+    return str(num).startswith('2017')
+
+
+def get_date_columns(df):
+    columns = df.iloc[0, :].index
+    date_column = []
+    for row_index in range(len(df)):
+        item = df.iloc[row_index]
+        for index in range(len(item)):
+            if type(item[index]) == np.int64 and is_prefix2017(item[index]):
+                date_column.append(columns[index])
+    return date_column

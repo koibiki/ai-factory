@@ -1,4 +1,5 @@
 import lightgbm as lgb
+import pandas as pd
 from sklearn.metrics import mean_squared_error
 
 from model_selection.predict_model import PredictModel
@@ -50,6 +51,9 @@ multi_class_params = {
 
 class LightGbmR(PredictModel):
 
+    def can_get_feature_importance(self):
+        return True
+
     @staticmethod
     def evaluator(pred, df):
         label = df.get_label().values.copy()
@@ -58,10 +62,13 @@ class LightGbmR(PredictModel):
 
     gbm = None
 
+    columns = None
+
     def create_predict_model(self):
         pass
 
     def fit(self, X_train, X_valid, y_train, y_valid):
+        self.columns = X_train.columns
         lgb_train = lgb.Dataset(X_train, y_train)
         lgb_valid = lgb.Dataset(X_valid, y_valid)
         self.gbm = lgb.train(regress_params, lgb_train, num_boost_round=50000, valid_sets=lgb_valid, verbose_eval=200,
@@ -70,11 +77,15 @@ class LightGbmR(PredictModel):
     def predict(self, X_test):
         return self.gbm.predict(X_test)
 
-    def feature_importance(self):
-        return self.gbm.feature_importance(importance_type='split')
+    def feature_importance(self, level=2):
+        importance = pd.Series(self.gbm.feature_importance(importance_type='split'), index=self.columns, name='importance')
+        return importance[importance > level]
 
 
 class LightGbmC(PredictModel):
+
+    def can_get_feature_importance(self):
+        return True
 
     gbm = None
 
@@ -89,7 +100,6 @@ class LightGbmC(PredictModel):
 
     def predict(self, X_test):
         return self.gbm.predict(X_test)
-
 
 
 class LightGbmMultiC(PredictModel):
@@ -107,5 +117,8 @@ class LightGbmMultiC(PredictModel):
 
     def predict(self, X_test):
         return self.gbm.predict(X_test)
+
+    def can_get_feature_importance(self):
+        return True
 
 

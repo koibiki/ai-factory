@@ -14,3 +14,6 @@ class PredictModel:
     @abstractmethod
     def predict(self, test_X):
         pass
+
+    def can_get_feature_importance(self):
+        return False

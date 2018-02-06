@@ -1,8 +1,15 @@
-import tensorflow as tf
-from sklearn import datasets
-import pandas as pd
-import numpy as np
-from sklearn.cross_validation import train_test_split
-from sklearn.metrics import mean_squared_error
-from model_selection.cv import k_fold_regressor
-from model_selection.regressor_model_factory import RegressorModelFactory
+from feature_engineering.feature_selector import *
+from feature_engineering.fill_nan import *
+
+train = pd.read_csv('./input/train.csv')
+train_X = train.iloc[:, 1:-1]
+train_Y = train.Y
+
+train_X = delete_constant(train_X)
+train_X = delete_nan(train_X)
+
+tool_dict = separate_tool_process(train_X)
+
+tool_dfs = get_tool_dfs(train_X, tool_dict)
+
+

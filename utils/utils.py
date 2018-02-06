@@ -4,26 +4,6 @@ import numpy as np
 import math
 
 
-def sample_rule(x):
-    if np.isnan(x):
-        return x
-    else:
-        random.seed(4)
-        return x * (0.97 + 0.06 * random.random())
-
-
-def create_sample(data):
-    randoms = []
-    data_sex_age_date = data.iloc[:, :3].reset_index(drop=True)
-    data_other = data.iloc[:, 3:].reset_index(drop=True)
-    for index in range(len(data_other)):
-        random_value = [sample_rule(item) for item in data_other.iloc[index].values]
-        random_series = pd.Series(random_value, index=data_other.columns)
-        randoms.append(random_series)
-    random_data = pd.DataFrame(randoms).reset_index(drop=True)
-    return pd.concat([data_sex_age_date, random_data], axis=1)
-
-
 def fix_min(data):
     for index in range(len(data)):
         column_values = data.iloc[:, index]
@@ -91,3 +71,43 @@ def softmax_to_class(data, level=0.5):
         class_type = 0 if np.max(data[index]) < level else np.where(data[index] == np.max(data[index]))[0][0]
         classes.append(class_type)
     return classes
+
+
+def calculate_mean(preds):
+    sum_pred = np.zeros(len(preds[0]))
+    for item in preds:
+        sum_pred += np.array(item)
+    return sum_pred/len(preds)
+
+
+def calculate_multi_mean(preds):
+    new_preds = []
+    for index in range(len(preds[0])):
+        sum_pred = np.zeros(len(preds[0][0]))
+        for i in range(len(preds)):
+            sum_pred += np.array(preds[i][index])
+        new_preds.append(sum_pred/len(preds))
+    return new_preds
+
+
+def calculate_importance_feature(importances):
+    all_feature = []
+    for features in importances:
+        for feature in features.index:
+            if feature not in all_feature:
+                all_feature.append(feature)
+    return all_feature
+
+
+def cv_important_feature(importances):
+    all_feature = calculate_importance_feature(importances)
+    non_important_feature = []
+    for feature in all_feature:
+        count = 0
+        for important_feature in importances:
+            if feature not in important_feature.index:
+                count += 1
+        if count >= 3:
+            non_important_feature.append(feature)
+
+    return [feature for feature in all_feature if feature not in non_important_feature]
