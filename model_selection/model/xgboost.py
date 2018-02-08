@@ -1,4 +1,7 @@
 import xgboost as xgb
+import pandas as pd
+from sklearn.metrics import mean_squared_error
+
 from model_selection.predict_model import PredictModel
 
 single_class_params = {
@@ -59,10 +62,29 @@ regress_params = {
     'eval_metric': 'rmse'
 }
 
+params = {
+    'reg_alpha': 0.001,
+    'silent': 1,
+    'booster': 'gbtree',
+    'objective': 'reg:linear',
+    'eta': 0.01,
+    'max_depth': 2,
+    'subsample': 0.5,
+    'min_child_weight': 1,
+    'colsample_bytree': 0.3,
+    'eval_metric': 'rmse',
+    'gamma': 0,
+}
+
 
 class XgbR(PredictModel):
-
     xgbr = None
+
+    @staticmethod
+    def evaluator(pred, df):
+        label = df.get_label()
+        score = mean_squared_error(label, pred)
+        return 'mse', score
 
     def create_predict_model(self):
         pass
@@ -72,16 +94,22 @@ class XgbR(PredictModel):
         xgb_train = xgb.DMatrix(X_train, label=y_train)
         xgb_valid = xgb.DMatrix(X_valid, label=y_valid)
         watchlist = [(xgb_train, 'train'), (xgb_valid, 'val')]
-        self.xgbr = xgb.train(regress_params, xgb_train, num_boost_round=5000, evals=watchlist,
-                              early_stopping_rounds=100, verbose_eval=100)
+        self.xgbr = xgb.train(regress_params, xgb_train, num_boost_round=50000, evals=watchlist, feval=self.evaluator,
+                              early_stopping_rounds=100, verbose_eval=300)
 
     def predict(self, X_test):
         xgb_test = xgb.DMatrix(X_test)
         return self.xgbr.predict(xgb_test, ntree_limit=self.xgbr.best_ntree_limit)
 
+    def can_get_feature_importance(self):
+        return True
+
+    def feature_importance(self, level=2):
+        importance = pd.Series(self.xgbr.get_score()).sort_values(ascending=False)
+        return importance[importance > level].sort_values(ascending=False)
+
 
 class XgbC(PredictModel):
-
     xgbc = None
 
     def create_predict_model(self):
@@ -102,7 +130,6 @@ class XgbC(PredictModel):
 
 
 class XgbMultiC(PredictModel):
-
     xgbc = None
 
     def create_predict_model(self):

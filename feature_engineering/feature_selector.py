@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import scipy as sc
+from minepy import MINE
 
 
 def delete_constant(df):
@@ -12,6 +14,26 @@ def delete_nan(df):
     null_num = df.isnull().sum(axis=0)/len(df)
     columns = null_num[null_num < 0.2].index
     return df[columns]
+
+
+def delete_duplicates(df):
+    df_t = df.T
+    df_t = df_t.drop_duplicates(keep='first')
+    return df.loc[:, df_t.T.columns]
+
+
+def calculate_pearson(df, y):
+    pearsons = {column: sc.stats.pearsonr(df.loc[:, column], y.values)[0] for column in df.columns}
+    return pd.Series(pearsons)
+
+
+def calculate_mic(df, y):
+    max_info = MINE()
+    mics ={}
+    for column in df.columns:
+        max_info.compute_score(df.loc[:, column], y.values)
+        mics[column] = max_info.mic()
+    return pd.Series(mics)
 
 
 def separate_date_feature(df):

@@ -5,7 +5,7 @@ def separate_num_str(df):
 
 
 def get_str_columns(df):
-    return [column for column in df.columns if column.startswith("T") or column.startswith("t")]
+    return [column for column in df.columns if column.startswith("T") or column.startswith("t") or column.startswith("O")]
 
 
 def num_to_str(data):

@@ -82,6 +82,7 @@ def k_fold_regressor(train_x, train_y, test_x, model_num, cv=5, important_level=
         test_y_preds.append(test_y_pred)
         cv_indexs[i] = [train_index, test_index]
         if model.can_get_feature_importance():
+            print("can_get_feature_importance")
             importances.append(model.feature_importance(important_level))
     print(rmf.get_model_name(model_num) + ' k fold validation:', mean_squared_error(train_y, y_pred))
     predict = calculate_mean(test_y_preds)

@@ -72,7 +72,7 @@ class LightGbmR(PredictModel):
         lgb_train = lgb.Dataset(X_train, y_train)
         lgb_valid = lgb.Dataset(X_valid, y_valid)
         self.gbm = lgb.train(regress_params, lgb_train, num_boost_round=50000, valid_sets=lgb_valid, verbose_eval=200,
-                             feval=self.evaluator, early_stopping_rounds=300)
+                             early_stopping_rounds=300)
 
     def predict(self, X_test):
         return self.gbm.predict(X_test)

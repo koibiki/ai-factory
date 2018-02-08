@@ -10,6 +10,8 @@ train_X = delete_nan(train_X)
 
 tool_dict = separate_tool_process(train_X)
 
+pd.concat()
+
 tool_dfs = get_tool_dfs(train_X, tool_dict)
 
 

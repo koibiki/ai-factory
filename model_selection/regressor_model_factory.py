@@ -3,6 +3,7 @@ from model_selection.model.decision_tree import DecisionTreeR
 from model_selection.model.extra_tree import ExtraTreeR
 from model_selection.model.gradient_boost import GbR
 from model_selection.model.knn import KnnR
+from model_selection.model.lasso import LassoR
 from model_selection.model.light_gbm import LightGbmR
 from model_selection.model.linear import LinearR
 from model_selection.model.random_forest import RandomForestR
@@ -31,7 +32,8 @@ class RegressorModelFactory(object):
     MODEL_SVM_LR = 11        # 1.10623  1.05592
     MODEL_SVM_POLY = 12      # 1.17332  1.12241
     MODEL_SVM_RBF = 13       # 1.12694  1.07303
-    MODEL_DECISION_TREE = 14
+    MODEL_LASSO = 14
+    MODEL_DECISION_TREE = 15
 
     model_name = {MODEL_LIGHET_GBM: 'light_gbm_r_',
                   MODEL_XGBOOST: 'xgboost_r_',
@@ -47,7 +49,8 @@ class RegressorModelFactory(object):
                   MODEL_SVM_LR: 'svm_lr_r_',
                   MODEL_SVM_POLY: 'svm_poly_r_',
                   MODEL_SVM_RBF: 'svm_brf_r_',
-                  MODEL_SGD: 'sgd_r_'}
+                  MODEL_SGD: 'sgd_r_',
+                  MODEL_LASSO: 'lasso_r_'}
 
     def create_model(self, argument):
         method_name = 'model_' + str(argument)
@@ -97,6 +100,9 @@ class RegressorModelFactory(object):
         return SvrRbfR()
 
     def model_14(self):
+        return LassoR()
+
+    def model_15(self):
         return DecisionTreeR()
 
     def get_model_name(self, argument):
