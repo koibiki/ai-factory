@@ -12,7 +12,7 @@ def delete_constant(df):
 
 def delete_nan(df):
     null_num = df.isnull().sum(axis=0)/len(df)
-    columns = null_num[null_num < 0.2].index
+    columns = null_num[null_num < 0.6].index
     return df[columns]
 
 

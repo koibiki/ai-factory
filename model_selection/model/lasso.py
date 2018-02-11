@@ -29,9 +29,7 @@ class LassoR(PredictModel):
         return True
 
     def feature_importance(self, level=2):
-        print(self.ls.coef_)
         coef = pd.Series(self.ls.coef_, index=self.columns)
-        print(sum(self.ls.coef_ != 0))
         return coef[coef != 0]
 
 
